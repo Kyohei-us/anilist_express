@@ -1,9 +1,37 @@
+import { useQuery } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { GetMedia } from '../graphql/gqlQueries'
+import { useInput } from '../hooks/useInput'
+import { MediaList } from '../graphql/schema/graphql'
+import { useState } from 'react'
 
 const Home: NextPage = () => {
+
+  // x: y renames destructured variable x to y
+  const {input: page, bind: bindPage, reset: resetPage} = useInput(1)
+
+  const {input: perPage, bind: bindPerPage, reset: resetPerPage} = useInput(1)
+
+  const [type, setType] = useState("ANIME");
+
+  const {loading, error, data} = page && perPage ? useQuery(GetMedia, {
+    variables: {
+      page: page,
+      perPage: perPage,
+      type: type,
+      sort: ["MEDIA_POPULARITY_DESC"]
+    }
+  }) : useQuery(GetMedia, {
+    variables: {
+      page: page ? page : 1,
+      perPage: perPage ? perPage : 1,
+      type: type,
+      sort: ["MEDIA_POPULARITY_DESC"]
+    }
+  })
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,58 +41,28 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className={styles.inputFields}>
+          <div className={styles.inputField}><label>Page: <input type="number" value={page} {...bindPage} /></label></div>
+          <div className={styles.inputField}><label>PerPage: <input type="number" value={perPage} {...bindPerPage} /></label></div>
+          <div className={styles.inputField}><label>
+            Type: 
+            <div className={styles.inputField}><input type="radio" onChange={() => setType("ANIME")} checked={type == "ANIME"} /> ANIME </div>
+            <div className={styles.inputField}><input type="radio" onChange={() => setType("MANGA")} checked={type == "MANGA"} /> MANGA </div>
+          </label></div>
         </div>
-      </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+        <div className={styles.searchResult}>
+          {loading ? "loading..." : 
+            data.Page.mediaList.map((ml: MediaList) => {
+              const m = ml.media;
+              if (!m)
+                return <></>
+              return <div className={styles.mediaTitle} key={m.id}>{m.title ? `${m.title.native} (${m.title.english})`: "Title not found!"}</div>
+            })}
+        </div>
+
+      </main>
     </div>
   )
 }

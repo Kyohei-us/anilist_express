@@ -2,6 +2,25 @@
   padding: 0 2rem;
 }
 
+.searchResult {
+  width: 40%;
+  margin: 2rem;
+  align-items: center;
+}
+
+.mediaTitle {
+  text-align: left;
+}
+
+.inputFields {
+  width: 40%;
+  align-items: center;
+}
+
+.inputField {
+  text-align: left;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;
