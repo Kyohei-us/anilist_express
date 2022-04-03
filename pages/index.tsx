@@ -4,8 +4,9 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { GetMedia } from '../graphql/gqlQueries'
 import { useInput } from '../hooks/useInput'
-import { MediaList } from '../graphql/schema/graphql'
 import { useState } from 'react'
+import { Media } from '../graphql/schema/graphql'
+import { MediaResult } from '../components/mediaResult'
 
 const Home: NextPage = () => {
 
@@ -21,14 +22,14 @@ const Home: NextPage = () => {
       page: page,
       perPage: perPage,
       type: type,
-      sort: ["MEDIA_POPULARITY_DESC"]
+      sort: ["POPULARITY_DESC"]
     }
   }) : useQuery(GetMedia, {
     variables: {
       page: page ? page : 1,
       perPage: perPage ? perPage : 1,
       type: type,
-      sort: ["MEDIA_POPULARITY_DESC"]
+      sort: ["POPULARITY_DESC"]
     }
   })
 
@@ -54,11 +55,10 @@ const Home: NextPage = () => {
 
         <div className={styles.searchResult}>
           {loading ? "loading..." : 
-            data.Page.mediaList.map((ml: MediaList) => {
-              const m = ml.media;
+            data.Page.media.map((m: Media) => {
               if (!m)
                 return <></>
-              return <div className={styles.mediaTitle} key={m.id}>{m.title ? `${m.title.native} (${m.title.english})`: "Title not found!"}</div>
+              return <MediaResult m={m} />
             })}
         </div>
 

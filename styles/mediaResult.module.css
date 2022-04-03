@@ -1,0 +1,13 @@
+.mediaResult {
+    border: inset;
+    border-width: 0.1rem;
+    border-color: red;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    padding: 0.5rem 0.5rem;
+    background: lightblue;
+  }
+  
+  .mediaTitle {
+    text-align: left;
+  }

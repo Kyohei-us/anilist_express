@@ -1,15 +1,12 @@
 .container {
   padding: 0 2rem;
+  background: #e6f2ff;
 }
 
 .searchResult {
   width: 40%;
   margin: 2rem;
   align-items: center;
-}
-
-.mediaTitle {
-  text-align: left;
 }
 
 .inputFields {
