@@ -9,7 +9,7 @@ export const MediaResult = (props: {m: Media}) => {
 
     const [show, setShow] = useState(false);
 
-    return <div key={m.id} className={styles.mediaResult}>
+    return <div className={styles.mediaResult}>
     <div className={styles.mediaTitle}>
       {m.title ? `${m.title.native} (${m.title.english})`: "Title not found!"}
     </div>

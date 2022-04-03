@@ -58,7 +58,7 @@ const Home: NextPage = () => {
             data.Page.media.map((m: Media) => {
               if (!m)
                 return <></>
-              return <MediaResult m={m} />
+              return <MediaResult m={m} key={m.id} />
             })}
         </div>
 
