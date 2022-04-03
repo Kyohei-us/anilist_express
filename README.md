@@ -26,6 +26,9 @@ Config is in codegen.yml file. Since all GraphQL queries are inside graphql fold
 - graphql
 - graphql-tag (for autocomplete of gql literal in vscode)
 - schema-ast (for generating schema file in .graphql format)
+- @graphql-codegen/typescript (for generating schema file in .tsx format)
+- @graphql-codegen/typescript-operations (for generating schema file in .tsx format)
+- @graphql-codegen/typescript-react-apollo (for generating schema file in .tsx format)
 
 ## npm commands
 
